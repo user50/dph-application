@@ -12,7 +12,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'yml-modifier-server'
+    baseName = 'pisdohuinia'
     version =  '0.1.0'
 }
 
