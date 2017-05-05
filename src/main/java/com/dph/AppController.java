@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class AppController {
@@ -16,7 +15,7 @@ public class AppController {
         return "ok";
     }
 
-    @RequestMapping(value = "/search/sum", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public Object search(@RequestParam(value="query", required=true) String query,
                          @RequestParam(value="items", required=true) String items,
                          @RequestParam(value="approach", required=true) WeightingApproach approach,
@@ -39,5 +38,40 @@ public class AppController {
 
         return entries;
     }
+
+    @RequestMapping(value = "/links", method = RequestMethod.GET)
+    public Object links(@RequestParam(value="items", required=true) String items)
+    {
+        List<Integer> itemIds = new ArrayList<>();
+        Scanner scanner = new Scanner(items);
+        scanner.useDelimiter(",");
+
+        while (scanner.hasNextInt())
+            itemIds.add(scanner.nextInt());
+
+
+        Map<Integer,String> links = new HashMap<>();
+
+        links.put(73762843, "http://st2.depositphotos.com/thumbs/1809585/73762843/thumb_380.jpg");
+        links.put(61540443,"http://st2.depositphotos.com/thumbs/1491329/61540443/thumb_380.jpg");
+        links.put(64678541, "http://st2.depositphotos.com/thumbs/1075946/64678541/thumb_380.jpg");
+        links.put(14784249, "http://st.depositphotos.com/thumbs/1345889/14784249/thumb_380.jpg");
+        links.put(54936569, "http://st2.depositphotos.com/thumbs/1606463/54936569/thumb_380.jpg" );
+        links.put(149154232, "http://st3.depositphotos.com/thumbs/11433272/149154232/thumb_380.jpg");
+        links.put(67922675, "http://st2.depositphotos.com/thumbs/1715570/67922675/thumb_380.jpg" );
+        links.put(25288983, "http://st.depositphotos.com/thumbs/1001594/25288983/thumb_380.jpg");
+        links.put(149688692, "http://st3.depositphotos.com/thumbs/9880800/149688692/thumb_380.jpg");
+        links.put(59864489, "http://st2.depositphotos.com/thumbs/1158045/59864489/thumb_380.jpg" );
+
+        Map<Integer,String> response = new HashMap<>();
+
+        for (Integer itemId : itemIds) {
+            response.put(itemId, links.get(itemId));
+        }
+
+        return response;
+    }
+
+
 
 }
