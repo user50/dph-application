@@ -84,9 +84,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Items</div>
-                    <div class="panel-body">
-                        <div class="list-group" id="itemsParam">
-                        </div>
+                    <div class="panel-body" id="itemsParam">
                     </div>
                 </div>
             </div>
@@ -95,10 +93,8 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Search Results</div>
-                    <div class="panel-body">
-                        <div class="list-group" id="searchResults">
+                    <div class="panel-body" id="searchResults">
                             No results yet
-                        </div>
                     </div>
                 </div>
             </div>
@@ -106,74 +102,7 @@
     </div>
 </div>
 
-<script>
-    $( document ).ready(function() {
-
-        chooseFnc = function(el){
-               console.log("I'm chosen!");
-        };
-
-        $('#searchBtn').on('click',function(){
-            console.log( "search" );
-
-            var query = $('#query')[0].value;
-            var items = $('#items')[0].value;
-            var approach = $('#approach')[0].value;
-            var service = $('#service')[0].value;
-            var min_downloads = $('#min_downloads')[0].value;
-            var page_size = $('#page_size')[0].value;
-            var offset = $('#offset')[0].value;
-
-            $.ajax({
-
-                // The URL for the request
-                url: "/search",
-
-                // The data to send (will be converted to a query string)
-                data: {
-                    query: query,
-                    items: items,
-                    approach: approach,
-                    service: service,
-                    min_downloads: min_downloads,
-                    page_size: page_size,
-                    offset: offset
-                },
-
-                // Whether this is a POST or GET request
-                type: "GET",
-
-                // The type of data we expect back
-                dataType : "json"
-            })
-                // Code to run if the request succeeds (is done);
-                // The response is passed to the function
-                    .done(function( json ) {
-                        $('#searchResults').empty();
-
-                        var array = json.searchResult;
-
-                        array.forEach(function(item, i, array){
-                            $("<a/>", {
-                                href: '#',
-                                class: 'list-group-item',
-                                html: '<img src="' + item.link + '">',
-                                click: function(e){
-                                    $(e.currentTarget).clone().appendTo('#itemsParam')
-                                }
-                            }).appendTo("#searchResults");
-                        });
-                    })
-                // Code to run if the request fails; the raw request and
-                // status codes are passed to the function
-                    .fail(function( xhr, status, errorThrown ) {
-                        alert( "Sorry, there was a problem!" );
-                        console.log( "Error: " + errorThrown );
-                        console.log( "Status: " + status );
-                    });
-        });
-    });
-</script>
+<script src="./js/app.js"></script>
 
 </body>
 </html>
