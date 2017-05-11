@@ -32,7 +32,7 @@ function renderResults( json ) {
         searchResult.forEach(function(item, i, searchResult){
             $("<a/>", {
                 href: '#',
-                html: '<img width="20%" src="' + item.link + '" id="' + item.itemId + '">',
+                html: '<img height="150px" src="' + item.link + '" id="' + item.itemId + '">',
                 click: addItem
             }).appendTo("#searchResults");
         });
@@ -44,7 +44,7 @@ function renderResults( json ) {
         itemsBlock.forEach(function(item, i, itemsBlock){
             $("<a/>", {
                 href: '#',
-                html: '<img width="20%" src="' + item.link + '" itemId="' + item.itemId + '">',
+                html: '<img height="150px" src="' + item.link + '" itemId="' + item.itemId + '">',
                 click: removeItem
             }).appendTo("#itemsParam");
         });
