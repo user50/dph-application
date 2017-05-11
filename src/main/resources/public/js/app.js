@@ -4,8 +4,23 @@ $('#searchBtn').on('click',function(){
 });
 
 
-function chooseItem(e){
+function addItem(e){
         $('#items')[0].value = $('#items')[0].value + "," + $(e.currentTarget).children().first().attr('id');
+
+        search();
+}
+
+function removeItem(e){
+        itemIdToRemove = $(e.currentTarget).children().first().attr('itemId');
+
+        itemsStr = $('#items')[0].value;
+        itemsArr = itemsStr.split(",");
+
+        var index = itemsArr.indexOf(itemIdToRemove);
+        itemsArr.splice(index, 1);
+
+        $('#items')[0].value = itemsArr.join();
+
         search();
 }
 
@@ -17,8 +32,8 @@ function renderResults( json ) {
         searchResult.forEach(function(item, i, searchResult){
             $("<a/>", {
                 href: '#',
-                html: '<img src="' + item.link + '" id="' + item.itemId + '">',
-                click: chooseItem
+                html: '<img width="20%" src="' + item.link + '" id="' + item.itemId + '">',
+                click: addItem
             }).appendTo("#searchResults");
         });
 
@@ -29,7 +44,8 @@ function renderResults( json ) {
         itemsBlock.forEach(function(item, i, itemsBlock){
             $("<a/>", {
                 href: '#',
-                html: '<img src="' + item.link + '" itemId="' + item.itemId + '">'
+                html: '<img width="20%" src="' + item.link + '" itemId="' + item.itemId + '">',
+                click: removeItem
             }).appendTo("#itemsParam");
         });
 }
