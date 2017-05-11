@@ -7,6 +7,9 @@
     <link href="./css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="./css/application.css" rel="stylesheet">
+
+    <script src="./js/jquery.js"></script>
+
 </head>
 
 <body>
@@ -25,24 +28,152 @@
     <div id="main-region" class="container">
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-inline">
+                <form class="form-horizontal">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="searchPhrase" placeholder="Шо шукаєш підр?">
+                        <label class="control-label col-sm-2" for="query">query:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="query" placeholder="Enter query">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-default" id="searchBtn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="items">items:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="items" placeholder="Enter items">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="approach">approach:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="approach" placeholder="Enter approach">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="service">service:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="service" placeholder="Enter service">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="min_downloads">min_downloads:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="min_downloads" placeholder="Enter min_downloads">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="page_size">page_size:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="page_size" placeholder="Enter page_size">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="offset">offset:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="offset" placeholder="Enter offset">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-default" id="searchBtn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search</button>
+
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
         <div class="row top-buffer">
             <div class="col-lg-12">
-                <div class="list-group">
-                    <a href="#"  class="list-group-item" onclick="alert('ПНХ!!!')"><img src="http://st2.depositphotos.com/thumbs/1809585/73762843/thumb_380.jpg"></a>
-                    <a href="#"  class="list-group-item" onclick="alert('ПНХ!!!')"><img src="https://st.depositphotos.com/1325771/2699/i/450/depositphotos_26999889-stock-photo-face-of-beautiful-woman-on.jpg"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Items</div>
+                    <div class="panel-body">
+                        <div class="list-group" id="itemsParam">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Search Results</div>
+                    <div class="panel-body">
+                        <div class="list-group" id="searchResults">
+                            No results yet
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $( document ).ready(function() {
+
+        chooseFnc = function(el){
+               console.log("I'm chosen!");
+        };
+
+        $('#searchBtn').on('click',function(){
+            console.log( "search" );
+
+            var query = $('#query')[0].value;
+            var items = $('#items')[0].value;
+            var approach = $('#approach')[0].value;
+            var service = $('#service')[0].value;
+            var min_downloads = $('#min_downloads')[0].value;
+            var page_size = $('#page_size')[0].value;
+            var offset = $('#offset')[0].value;
+
+            $.ajax({
+
+                // The URL for the request
+                url: "/search",
+
+                // The data to send (will be converted to a query string)
+                data: {
+                    query: query,
+                    items: items,
+                    approach: approach,
+                    service: service,
+                    min_downloads: min_downloads,
+                    page_size: page_size,
+                    offset: offset
+                },
+
+                // Whether this is a POST or GET request
+                type: "GET",
+
+                // The type of data we expect back
+                dataType : "json"
+            })
+                // Code to run if the request succeeds (is done);
+                // The response is passed to the function
+                    .done(function( json ) {
+                        $('#searchResults').empty();
+
+                        var array = json.searchResult;
+
+                        array.forEach(function(item, i, array){
+                            $("<a/>", {
+                                href: '#',
+                                class: 'list-group-item',
+                                html: '<img src="' + item.link + '">',
+                                click: function(e){
+                                    $(e.currentTarget).clone().appendTo('#itemsParam')
+                                }
+                            }).appendTo("#searchResults");
+                        });
+                    })
+                // Code to run if the request fails; the raw request and
+                // status codes are passed to the function
+                    .fail(function( xhr, status, errorThrown ) {
+                        alert( "Sorry, there was a problem!" );
+                        console.log( "Error: " + errorThrown );
+                        console.log( "Status: " + status );
+                    });
+        });
+    });
+</script>
 
 </body>
 </html>
